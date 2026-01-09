@@ -1,0 +1,61 @@
+name: Epic Sync (UX Design → App Issues)
+
+on:
+  # ux-designのepics/変更をwebhookで検知
+  repository_dispatch:
+    types: [epic-changed]
+
+  # 手動実行
+  workflow_dispatch:
+    inputs:
+      epic_id:
+        description: '特定のEpic ID (空欄で全件)'
+        required: false
+        type: string
+      dry_run:
+        description: 'ドライラン（Issueを作成しない）'
+        required: false
+        default: false
+        type: boolean
+
+  # 定期実行（差分同期）
+  schedule:
+    - cron: '0 1 * * *'  # 毎日 10:00 JST
+
+env:
+  UX_REPO: doglife-one/doglife-ux-design
+  APP_REPO: doglife-one/doglife-app
+  PM_REPO: doglife-one/doglife-project-management
+
+jobs:
+  sync-epics:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Checkout .github repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install yaml
+
+      - name: Sync Epics to Issues
+        env:
+          GH_TOKEN: ${{ secrets.EPIC_SYNC_TOKEN }}
+          EPIC_ID: ${{ github.event.inputs.epic_id }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: node scripts/epic-sync.js
+
+      - name: Summary
+        run: |
+          echo "## Epic Sync Results" >> $GITHUB_STEP_SUMMARY
+          if [ -f sync-report.md ]; then
+            cat sync-report.md >> $GITHUB_STEP_SUMMARY
+          fi

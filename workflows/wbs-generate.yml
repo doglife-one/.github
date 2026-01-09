@@ -1,0 +1,77 @@
+name: WBS Generate (Epics → project-management)
+
+on:
+  # Epic同期後に実行
+  workflow_run:
+    workflows: ["Epic Sync (UX Design → App Issues)"]
+    types: [completed]
+
+  # 手動実行
+  workflow_dispatch:
+
+  # 定期実行
+  schedule:
+    - cron: '0 2 * * *'  # 毎日 11:00 JST
+
+env:
+  UX_REPO: doglife-one/doglife-ux-design
+  PM_REPO: doglife-one/doglife-project-management
+
+jobs:
+  generate-wbs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout .github repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install yaml
+
+      - name: Generate WBS
+        env:
+          GH_TOKEN: ${{ secrets.EPIC_SYNC_TOKEN }}
+        run: node scripts/wbs-generate.js
+
+      - name: Commit WBS to project-management
+        env:
+          GH_TOKEN: ${{ secrets.EPIC_SYNC_TOKEN }}
+        run: |
+          if [ -f WBS.md ]; then
+            # Clone project-management
+            git clone https://x-access-token:${GH_TOKEN}@github.com/${PM_REPO}.git pm-repo
+            cp WBS.md pm-repo/WBS.md
+
+            cd pm-repo
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+
+            if git diff --quiet WBS.md; then
+              echo "No changes to WBS.md"
+            else
+              git add WBS.md
+              git commit -m "docs: WBS自動更新 $(date +%Y-%m-%d)
+
+              🤖 Auto-generated from ux-design/epics/"
+              git push
+              echo "WBS.md updated and pushed"
+            fi
+          fi
+
+      - name: Summary
+        run: |
+          echo "## WBS Generation Results" >> $GITHUB_STEP_SUMMARY
+          if [ -f WBS.md ]; then
+            echo "✅ WBS.md generated successfully" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            head -50 WBS.md >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Failed to generate WBS.md" >> $GITHUB_STEP_SUMMARY
+          fi
