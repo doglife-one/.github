@@ -1,0 +1,12 @@
+{
+  "name": "doglife-github-automation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DogLife Organization automation scripts",
+  "scripts": {
+    "check": "node scripts/consistency-check.js"
+  },
+  "dependencies": {
+    "yaml": "^2.3.4"
+  }
+}

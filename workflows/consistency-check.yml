@@ -1,0 +1,72 @@
+name: Repository Consistency Check
+
+on:
+  schedule:
+    - cron: '0 0 * * 1'  # 毎週月曜 9:00 JST (0:00 UTC)
+  workflow_dispatch:      # 手動実行
+    inputs:
+      create_issue:
+        description: '不整合発見時にIssue作成'
+        required: false
+        default: 'true'
+        type: boolean
+
+env:
+  REPOS: |
+    doglife-one/doglife-ux-design
+    doglife-one/doglife-project-management
+    doglife-one/doglife-app
+
+jobs:
+  check-consistency:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
+      - name: Checkout .github repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install yaml
+
+      - name: Run consistency checks
+        id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/consistency-check.js
+        continue-on-error: true
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: consistency-report
+          path: consistency-report.md
+
+      - name: Create Issue if problems found
+        if: steps.check.outcome == 'failure' && (github.event.inputs.create_issue == 'true' || github.event_name == 'schedule')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -f consistency-report.md ]; then
+            gh issue create \
+              --repo doglife-one/doglife-project-management \
+              --title "🔍 整合性チェック: 不整合検出 $(date +%Y-%m-%d)" \
+              --body-file consistency-report.md \
+              --label "automated,consistency-check"
+          fi
+
+      - name: Summary
+        run: |
+          echo "## Consistency Check Results" >> $GITHUB_STEP_SUMMARY
+          if [ -f consistency-report.md ]; then
+            cat consistency-report.md >> $GITHUB_STEP_SUMMARY
+          else
+            echo "✅ No issues found" >> $GITHUB_STEP_SUMMARY
+          fi
