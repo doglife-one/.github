@@ -7,9 +7,16 @@
 必ず [ID_CONVENTIONS.md](ID_CONVENTIONS.md) に従うこと。
 
 - Epic: `PREFIX-##` (例: AUTH-01)
-- Journey: `J###` (例: J001, J202, J301)
-- Blueprint: `BP###` (例: BP001)
-- Story: `S###` (例: S010)
+- Journey: `[DOMAIN]-J###` (例: T-J001, C-J002, BR-J001)
+- Blueprint: `[DOMAIN]-BP###` (例: T-BP001, C-BP005)
+- Story: `[DOMAIN]-S###` (例: T-S010, C-S001)
+
+### ドメインプレフィックス
+| プレフィックス | ドメイン |
+|--------------|---------|
+| T- | Travel (OTA) |
+| C- | Column (コラム) |
+| BR- | Branding (ブランド) |
 
 ## リポジトリ階層
 
@@ -43,4 +50,4 @@ app (最下層)           ← 実装
 
 ---
 
-更新: 2026-01-13
+更新: 2026-01-14

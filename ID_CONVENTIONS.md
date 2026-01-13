@@ -10,6 +10,16 @@ Epic (EPIC_IDS.md)
        └─ Issue/Task
 ```
 
+## ドメインプレフィックス
+
+Journey、Blueprint、Storyにはドメインプレフィックスをつけてグローバルにユニークにする。
+
+| プレフィックス | ドメイン | 例 |
+|--------------|---------|-----|
+| T- | Travel (OTA) | T-J001, T-BP001, T-S010 |
+| C- | Column (コラム) | C-J001, C-BP001 |
+| BR- | Branding (ブランド) | BR-J001, BR-BP001 |
+
 ## ID体系一覧
 
 ### Epic ID
@@ -28,48 +38,48 @@ Epic (EPIC_IDS.md)
 **場所**: ux-design/journeys/
 
 ```
-J[CATEGORY][##]
+[DOMAIN]-J[ROLE][##]
 ```
 
-| カテゴリ | 範囲 | 対象 |
-|---------|------|------|
-| J001-J099 | user | 旅行者向け |
-| J200-J299 | admin | 管理者向け |
-| J300-J399 | partner | パートナー向け |
+| ロール | 範囲 | 対象 |
+|--------|------|------|
+| 001-099 | user | 旅行者向け |
+| 200-299 | admin | 管理者向け |
+| 300-399 | partner | パートナー向け |
 
-例: `J001`, `J202`, `J301`
+例: `T-J001`, `T-J202`, `C-J001`, `BR-J001`
 
 ### Blueprint ID
 
 **場所**: ux-design/blueprints/
 
 ```
-BP[CATEGORY][##]
+[DOMAIN]-BP[ROLE][##]
 ```
 
-| カテゴリ | 範囲 | 対象 |
-|---------|------|------|
-| BP001-BP099 | user | 旅行者向け |
-| BP200-BP299 | admin | 管理者向け |
-| BP300-BP399 | partner | パートナー向け |
+| ロール | 範囲 | 対象 |
+|--------|------|------|
+| 001-099 | user | 旅行者向け |
+| 200-299 | admin | 管理者向け |
+| 300-399 | partner | パートナー向け |
 
-例: `BP001`, `BP201`, `BP301`
+例: `T-BP001`, `T-BP201`, `C-BP001`, `BR-BP001`
 
 ### Story ID
 
 **場所**: ux-design/stories/
 
 ```
-S[CATEGORY][##]
+[DOMAIN]-S[ROLE][##]
 ```
 
-| カテゴリ | 範囲 | 対象 |
-|---------|------|------|
-| S001-S099 | user | 旅行者向け |
-| S200-S299 | admin | 管理者向け |
-| S300-S399 | partner | パートナー向け |
+| ロール | 範囲 | 対象 |
+|--------|------|------|
+| 001-099 | user | 旅行者向け |
+| 200-299 | admin | 管理者向け |
+| 300-399 | partner | パートナー向け |
 
-例: `S010`, `S201`, `S305`
+例: `T-S010`, `T-S201`, `C-S001`
 
 ### Integration Flow ID
 
@@ -95,9 +105,9 @@ RUN[###]
 
 ```
 Epic (AUTH-01)
-  ├─ Journey (J001)
-  ├─ Blueprint (BP001)
-  ├─ Story (S010)
+  ├─ Journey (T-J001)
+  ├─ Blueprint (T-BP001)
+  ├─ Story (T-S010)
   │    └─ GitHub Issue (#123)
   └─ Feature (BDD)
 ```
@@ -106,10 +116,10 @@ Epic (AUTH-01)
 
 | リポジトリ | 管理するID |
 |-----------|-----------|
-| ux-design | J###, BP###, S###, INT###, RUN### |
+| ux-design | [DOMAIN]-J###, [DOMAIN]-BP###, [DOMAIN]-S###, INT###, RUN### |
 | project-management | Epic (PREFIX-##), Issue |
 | app | 実装タスク（Issue参照） |
 
 ---
 
-更新: 2026-01-13
+更新: 2026-01-14
