@@ -33,7 +33,7 @@ DogLife共通の用語定義。
 | 用語 | 説明 |
 |------|------|
 | TMS | 手間いらず.NET（宿泊施設管理システム） |
-| Stripe | 決済プラットフォーム |
+| GMO Payment Gateway | 決済プラットフォーム |
 | Supabase | Backend as a Service（PostgreSQL + Auth + Realtime） |
 | Vercel | フロントエンドホスティング |
 

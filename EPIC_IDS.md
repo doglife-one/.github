@@ -49,13 +49,15 @@ DogLife全リポジトリ共通のEpic ID体系。
 | TMS-01-4 | TMS監視基盤 | #120 |
 | TMS-02 | TMS連携（手間いらず.NET） | #123 |
 
-### B2B/Admin Epic（予定）
+### B2B/Admin Epic
 
-| ID | 名称 | 対象 | 状態 |
-|----|------|------|------|
-| PORTAL-01 | Facility Portal | partner | Planned |
-| DASHBOARD-01 | Operations Dashboard | admin | Planned |
-| INTEGRATION-01 | System Integration Layer | all | Planned |
+| ID | 名称 | 対象 | 別名 | 状態 |
+|----|------|------|------|------|
+| PORTAL-01 | Facility Portal | partner | PARTNER-01 | Active |
+| DASHBOARD-01 | Operations Dashboard | admin | OPS-01 | Active |
+| INTEGRATION-01 | System Integration Layer | all | - | Planned |
+
+**注**: ux-design/epics/では別名（PARTNER-01, OPS-01）で管理されています。
 
 ### ビジネスEpic
 
@@ -66,6 +68,8 @@ DogLife全リポジトリ共通のEpic ID体系。
 | B-LAW-03 | 特定商取引法 | #148 |
 | B-LAW-04 | 旅行業登録 | #149 |
 | B-BIZ-01 | 予約ポリシー | #151 |
+| B-CONTRACT-01 | 外部契約・API契約 | - |
+| B-SALES-01 | 施設獲得・営業活動 | - |
 | B-OPS-01 | カスタマーサポート準備 | #150 |
 | B-OPS-02 | 運用・監視 | #152 |
 
@@ -103,6 +107,8 @@ DogLife全リポジトリ共通のEpic ID体系。
 | SEO | SEO |
 | B-LAW | 法務・コンプライアンス |
 | B-BIZ | ビジネス要件 |
+| B-CONTRACT | 外部契約 |
+| B-SALES | 施設獲得・営業 |
 | B-OPS | 運用準備 |
 
 ## 対象ロール
